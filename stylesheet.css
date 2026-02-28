@@ -1,271 +1,123 @@
-* {
-  box-sizing: border-box;
-}
+/* ==============================
+           ベーススタイル
+        ============================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; 
+            color: #333; 
+            background-color: #fafafa; 
+            line-height: 1.6; 
+        }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        a:hover { opacity: 0.7; }
+        ul { list-style: none; }
 
-body {
-  margin: 0;
-  font-family: "Hiragino Kaku Gothic ProN";
-}
+        /* ==============================
+           ヘッダー＆ナビゲーション
+        ============================== */
+        header { 
+            position: fixed; top: 0; width: 100%; height: 70px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 5%; z-index: 100; 
+            background: rgba(255, 255, 255, 0.95); 
+        }
+        .logo { font-size: 24px; font-weight: bold; letter-spacing: 2px; }
+        
+        /* ハンバーガーメニューのボタン */
+        .menu-btn { display: block; cursor: pointer; z-index: 101; }
+        .menu-btn span { 
+            display: block; width: 30px; height: 2px; 
+            background-color: #333; margin-bottom: 6px; transition: 0.3s; 
+        }
+        .menu-btn span:last-child { margin-bottom: 0; }
+        
+        /* メニュー開閉時のボタンアニメーション */
+        .menu-btn.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .menu-btn.active span:nth-child(2) { opacity: 0; }
+        .menu-btn.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-a {
-  text-decoration: none;
-}
+        /* グローバルナビゲーション（隠しメニュー） */
+        .nav-menu { 
+            position: fixed; top: 0; right: -100%; 
+            width: 100%; height: 100vh; background: #fff; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            transition: 0.4s ease-in-out; z-index: 99; 
+        }
+        .nav-menu.active { right: 0; }
+        .nav-menu li { margin: 20px 0; font-size: 24px; font-weight: bold; letter-spacing: 2px; }
 
-.container {
-  width: 100%;
-  padding: 0 15px;
-  margin: 0 auto;
-}
+        /* ==============================
+           ヒーローセクション（動画背景）
+        ============================== */
+        .hero { 
+            position: relative; width: 100%; height: 100vh; 
+            overflow: hidden; display: flex; justify-content: center; align-items: center; 
+            background-color: #000; 
+        }
+        /* 動画を画面いっぱいに広げる */
+        .hero-video { 
+            position: absolute; top: 50%; left: 50%; 
+            min-width: 100%; min-height: 100%; 
+            transform: translate(-50%, -50%); 
+            opacity: 0.6; pointer-events: none; object-fit: cover;
+        }
+        .hero-content { position: relative; z-index: 10; text-align: center; color: #fff; }
+        .hero-content h1 { font-size: 4rem; margin-bottom: 20px; letter-spacing: 0.2em; }
+        
+        /* 音声ON/OFFボタン */
+        .unmute-btn { 
+            padding: 12px 24px; border: 1px solid #fff; background: rgba(0,0,0,0.5); 
+            color: #fff; font-size: 14px; cursor: pointer; 
+            transition: 0.3s; border-radius: 30px; letter-spacing: 1px;
+        }
+        .unmute-btn:hover { background: #fff; color: #000; }
 
-.top-wrapper {
-  padding: 180px 0 100px 0;
-  background-image: url(top.png);
-  background-size: cover;
-  color: white;
-  text-align: center;
-}
+        /* ==============================
+           コンテンツセクション共通
+        ============================== */
+        section { padding: 100px 5%; max-width: 1000px; margin: 0 auto; }
+        .section-title { 
+            text-align: center; font-size: 32px; margin-bottom: 50px; 
+            letter-spacing: 2px; text-transform: uppercase; font-weight: bold;
+        }
 
-.top-wrapper h1 {
-  opacity: 0.7;
-  font-size: 45px;
-  letter-spacing: 5px;
-}
+        /* News セクション */
+        .news-list li { 
+            border-bottom: 1px solid #ddd; padding: 25px 0; 
+            display: flex; flex-wrap: wrap; gap: 20px; align-items: center; 
+        }
+        .news-date { color: #888; font-size: 14px; min-width: 120px; font-weight: bold; }
+        .news-title { flex: 1; font-size: 16px; }
 
-.top-wrapper p {
-  opacity: 0.7;
-  font-size: 16px;
-  margin-bottom: 40px;
-}
+        /* Release セクション */
+        .release-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; 
+        }
+        .release-item { background: #fff; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .jacket-placeholder { 
+            width: 100%; aspect-ratio: 1/1; background: #e0e0e0; 
+            margin-bottom: 15px; display: flex; align-items: center; justify-content: center; 
+            color: #999; font-size: 14px; border-radius: 4px;
+        }
+        .release-title { font-weight: bold; margin-bottom: 5px; font-size: 18px; }
+        .release-date { font-size: 12px; color: #666; }
 
-.btn-wrapper {
-  text-align: center;
-}
+        /* Live セクション */
+        .live-list li { 
+            background: #fff; margin-bottom: 20px; padding: 25px; 
+            border-left: 6px solid #111; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 15px;
+        }
+        .live-info h3 { font-size: 20px; margin-bottom: 5px; }
+        .live-info p { font-size: 14px; color: #555; }
+        .live-btn { 
+            padding: 10px 30px; background: #111; color: #fff; 
+            border-radius: 30px; font-size: 14px; 
+        }
 
-.btn-wrapper p {
-  margin-bottom: 20px;
-}
-
-.signup {
-  background-color: #239b76;
-}
-
-.facebook {
-  background-color: #3b5998;
-  margin-right: 10px;
-}
-
-.twitter {
-  background-color: #55acee;
-}
-
-.btn {
-  padding: 8px 24px;
-  color: white;
-  display: inline-block;
-  opacity: 0.8;
-  border-radius: 4px;
-  text-align: center;
-}
-
-.btn:hover {
-  opacity: 1;
-}
-
-.fa {
-  margin-right: 5px;
-}
-
-header {
-  height: 65px;
-  width: 100%;
-  background-color: rgba(34,49,52,0.9);
-  position :fixed;
-  top: 0;
-  z-index: 10;
-}
-
-.logo {
-  width: 124px;
-  margin-top: 20px;
-}
-
-.header-left {
-  float: left;
-}
-
-.header-right {
-  float: right;
-  margin-right: -25px;
-}
-
-.header-right a {
-  line-height: 65px;
-  padding: 0 25px;
-  color: white;
-  display: block;
-  float: left;
-  transition: all 0.5s;
-}
-
-.header-right a:hover {
-  background-color: rgba(255,255,255,0.3);
-}
-
-.lesson-wrapper {
-  height: 580px;
-  padding-bottom: 80px;
-  padding-left: 5%;
-  padding-right: 5%;
-  background-color: #f7f7f7;
-  text-align: center;
-}
-
-.heading {
-  padding-top: 80px;
-  padding-bottom: 50px;
-  color: #5f5d60;
-}
-
-.heading h2 {
-  font-weight: normal;
-}
-
-.lesson {
-  float: left;
-  width: 25%;
-}
-
-.lesson-icon {
-  position: relative;
-}
-
-.lesson-icon p {
-  position: absolute;
-  top: 37%;
-  width: 100%;
-  color: white;
-}
-
-.text-contents {
-  width: 80%;
-  display: inline-block;
-  margin-top: 15px;
-  font-size: 13px;
-  color: #b3aeb5;
-}
-
-.heading h3 {
-  font-weight: normal;
-}
-
-.message-wrapper {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 80px;
-  text-align: center;
-}
-
-.message {
-  padding: 15px 40px;
-  background-color: #5dca88;
-  cursor: pointer;
-  box-shadow: 0px 7px #1a7940;
-}
-
-.message:active {
-  position: relative;
-  top: 7px;
-  box-shadow: none;
-}
-
-footer img {
-  width: 125px;
-}
-
-footer p {
-  color: #b3aeb5;
-  font-size: 12px;
-}
-
-footer {
-  padding-top: 30px;
-  padding-bottom: 20px;
-}
-
-.menu-icon {
-  color: white;
-  float: right;
-  font-size: 25px;
-  padding: 21px 0;
-  display: none;
-}
-
-.clear {
-  clear: left;
-}
-
-@media all and (max-width: 1000px) {
-  .lesson {
-    width: 50%;
-    margin-bottom: 50px;
-  }
-
-  .lesson-wrapper {
-    height: 990px;
-  }
-
-  footer {
-    text-align: center;
-  }
-}
-
-@media all and (max-width: 750px) {
-  .top-wrapper h1 {
-    font-size: 32px;
-  }
-
-  .heading h2 {
-    font-size: 20px;
-  }
-}
-
-@media all and (max-width: 670px) {
-  .header-right {
-    display: none;
-  }
-
-  .menu-icon {
-    display: block;
-  }
-
-  .top-wrapper .btn {
-    width: 100%;
-  }
-
-  .twitter {
-    margin-top: 10px;
-  }
-
-  .top-wrapper {
-    text-align: left;
-  }
-
-  .top-wrapper h1 {
-    font-size: 24px;
-  }
-
-  .top-wrapper p {
-    font-size: 14px;
-  }
-
-  .lesson {
-    width: 100%;
-  }
-
-  .lesson-wrapper {
-    height: 1700px;
-  }
-
-  .message-wrapper .btn {
-    width: 100%;
-  }
-}
+        /* ==============================
+           フッター
+        ============================== */
+        footer { background: #111; color: #fff; text-align: center; padding: 40px 0; margin-top: 50px; }
+        footer p { font-size: 12px; letter-spacing: 1px; color: #888; }
