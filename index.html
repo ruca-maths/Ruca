@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Official Website</title>
+    <style>
+        /* ==============================
+           ベーススタイル
+        ============================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; 
+            color: #333; 
+            background-color: #fafafa; 
+            line-height: 1.6; 
+        }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        a:hover { opacity: 0.7; }
+        ul { list-style: none; }
+
+        /* ==============================
+           ヘッダー＆ナビゲーション
+        ============================== */
+        header { 
+            position: fixed; top: 0; width: 100%; height: 70px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 5%; z-index: 100; 
+            background: rgba(255, 255, 255, 0.95); 
+        }
+        .logo { font-size: 24px; font-weight: bold; letter-spacing: 2px; }
+        
+        /* ハンバーガーメニューのボタン */
+        .menu-btn { display: block; cursor: pointer; z-index: 101; }
+        .menu-btn span { 
+            display: block; width: 30px; height: 2px; 
+            background-color: #333; margin-bottom: 6px; transition: 0.3s; 
+        }
+        .menu-btn span:last-child { margin-bottom: 0; }
+        
+        /* メニュー開閉時のボタンアニメーション */
+        .menu-btn.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .menu-btn.active span:nth-child(2) { opacity: 0; }
+        .menu-btn.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* グローバルナビゲーション（隠しメニュー） */
+        .nav-menu { 
+            position: fixed; top: 0; right: -100%; 
+            width: 100%; height: 100vh; background: #fff; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            transition: 0.4s ease-in-out; z-index: 99; 
+        }
+        .nav-menu.active { right: 0; }
+        .nav-menu li { margin: 20px 0; font-size: 24px; font-weight: bold; letter-spacing: 2px; }
+
+        /* ==============================
+           ヒーローセクション（動画背景）
+        ============================== */
+        .hero { 
+            position: relative; width: 100%; height: 100vh; 
+            overflow: hidden; display: flex; justify-content: center; align-items: center; 
+            background-color: #000; 
+        }
+        /* 動画を画面いっぱいに広げる */
+        .hero-video { 
+            position: absolute; top: 50%; left: 50%; 
+            min-width: 100%; min-height: 100%; 
+            transform: translate(-50%, -50%); 
+            opacity: 0.6; pointer-events: none; object-fit: cover;
+        }
+        .hero-content { position: relative; z-index: 10; text-align: center; color: #fff; }
+        .hero-content h1 { font-size: 4rem; margin-bottom: 20px; letter-spacing: 0.2em; }
+        
+        /* 音声ON/OFFボタン */
+        .unmute-btn { 
+            padding: 12px 24px; border: 1px solid #fff; background: rgba(0,0,0,0.5); 
+            color: #fff; font-size: 14px; cursor: pointer; 
+            transition: 0.3s; border-radius: 30px; letter-spacing: 1px;
+        }
+        .unmute-btn:hover { background: #fff; color: #000; }
+
+        /* ==============================
+           コンテンツセクション共通
+        ============================== */
+        section { padding: 100px 5%; max-width: 1000px; margin: 0 auto; }
+        .section-title { 
+            text-align: center; font-size: 32px; margin-bottom: 50px; 
+            letter-spacing: 2px; text-transform: uppercase; font-weight: bold;
+        }
+
+        /* News セクション */
+        .news-list li { 
+            border-bottom: 1px solid #ddd; padding: 25px 0; 
+            display: flex; flex-wrap: wrap; gap: 20px; align-items: center; 
+        }
+        .news-date { color: #888; font-size: 14px; min-width: 120px; font-weight: bold; }
+        .news-title { flex: 1; font-size: 16px; }
+
+        /* Release セクション */
+        .release-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; 
+        }
+        .release-item { background: #fff; padding: 20px; text-align: center; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .jacket-placeholder { 
+            width: 100%; aspect-ratio: 1/1; background: #e0e0e0; 
+            margin-bottom: 15px; display: flex; align-items: center; justify-content: center; 
+            color: #999; font-size: 14px; border-radius: 4px;
+        }
+        .release-title { font-weight: bold; margin-bottom: 5px; font-size: 18px; }
+        .release-date { font-size: 12px; color: #666; }
+
+        /* Live セクション */
+        .live-list li { 
+            background: #fff; margin-bottom: 20px; padding: 25px; 
+            border-left: 6px solid #111; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 15px;
+        }
+        .live-info h3 { font-size: 20px; margin-bottom: 5px; }
+        .live-info p { font-size: 14px; color: #555; }
+        .live-btn { 
+            padding: 10px 30px; background: #111; color: #fff; 
+            border-radius: 30px; font-size: 14px; 
+        }
+
+        /* ==============================
+           フッター
+        ============================== */
+        footer { background: #111; color: #fff; text-align: center; padding: 40px 0; margin-top: 50px; }
+        footer p { font-size: 12px; letter-spacing: 1px; color: #888; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><a href="#">Artist Name</a></div>
+        <div class="menu-btn" id="menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <nav class="nav-menu" id="nav-menu">
+        <ul>
+            <li><a href="#news" class="nav-link">NEWS</a></li>
+            <li><a href="#release" class="nav-link">RELEASE</a></li>
+            <li><a href="#live" class="nav-link">LIVE</a></li>
+            <li><a href="#video" class="nav-link">VIDEO</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <video id="bg-video" class="hero-video" autoplay loop muted playsinline>
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1>Artist Name</h1>
+            <button id="unmute-btn" class="unmute-btn">Tap to unmute</button>
+        </div>
+    </div>
+
+    <section id="news">
+        <h2 class="section-title">News</h2>
+        <ul class="news-list">
+            <li>
+                <span class="news-date">2026.03.01</span>
+                <span class="news-title"><a href="#">新しいミュージックビデオを公開しました。</a></span>
+            </li>
+            <li>
+                <span class="news-date">2026.02.15</span>
+                <span class="news-title"><a href="#">春の全国ツアー開催決定！チケット先行予約開始。</a></span>
+            </li>
+            <li>
+                <span class="news-date">2026.01.20</span>
+                <span class="news-title"><a href="#">公式オンラインストアがオープンしました。</a></span>
+            </li>
+        </ul>
+    </section>
+
+    <section id="release">
+        <h2 class="section-title">Release</h2>
+        <div class="release-grid">
+            <div class="release-item">
+                <div class="jacket-placeholder">Jacket Image (600x600)</div>
+                <div class="release-title">New Single "Hello"</div>
+                <div class="release-date">2026.04.15 Release</div>
+            </div>
+            <div class="release-item">
+                <div class="jacket-placeholder">Jacket Image (600x600)</div>
+                <div class="release-title">1st Album "World"</div>
+                <div class="release-date">2025.11.03 Release</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="live">
+        <h2 class="section-title">Live</h2>
+        <ul class="live-list">
+            <li>
+                <div class="live-info">
+                    <h3>Spring Tour 2026 - Tokyo</h3>
+                    <p>2026.05.10 (Sun) @ Zepp Tokyo</p>
+                </div>
+                <a href="#" class="live-btn">Details</a>
+            </li>
+            <li>
+                <div class="live-info">
+                    <h3>Spring Tour 2026 - Osaka</h3>
+                    <p>2026.05.17 (Sun) @ Namba Hatch</p>
+                </div>
+                <a href="#" class="live-btn">Details</a>
+            </li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Artist Name Official Website. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // ハンバーガーメニューの開閉処理
+        const menuBtn = document.getElementById('menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // メニューのリンクをクリックしたらメニューを閉じる
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuBtn.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // 動画のミュート解除・再生切り替え処理
+        const video = document.getElementById('bg-video');
+        const unmuteBtn = document.getElementById('unmute-btn');
+
+        unmuteBtn.addEventListener('click', () => {
+            if (video.muted) {
+                video.muted = false;
+                unmuteBtn.textContent = 'Mute';
+            } else {
+                video.muted = true;
+                unmuteBtn.textContent = 'Tap to unmute';
+            }
+        });
+    </script>
+
+</body>
+</html>
