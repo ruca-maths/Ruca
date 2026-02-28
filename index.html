@@ -1,130 +1,519 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-   <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artist Official Website</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Ruca</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax for rendering LaTeX formulas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Scroll Animation Library -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400&family=Noto+Serif+JP:wght@200;400;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap');
+        
+        :root {
+            --bg-color: #ffffff;
+            --text-main: #2c2c2c;
+            --text-sub: #8c8c8c;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.8;
+            letter-spacing: 0.05em;
+            overflow-x: hidden;
+        }
+
+        .serif {
+            font-family: 'Noto Serif JP', serif;
+            font-weight: 200;
+        }
+
+        .italic-serif {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+        }
+
+        /* Page transition */
+        #page-content {
+            transition: opacity 0.6s ease-in-out;
+        }
+
+        .fade-out {
+            opacity: 0;
+        }
+
+        .fade-in-content {
+            opacity: 1;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Seamless Grid styles */
+        .topic-card {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 21 / 9;
+        }
+        
+        .topic-visual {
+            width: 100%;
+            height: 100%;
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            background-color: #fbfbfb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .topic-card:hover .topic-visual {
+            transform: scale(1.05);
+        }
+
+        .topic-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            opacity: 1;
+            transition: background 0.5s ease;
+        }
+
+        .topic-card:hover .topic-overlay {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .hover-link {
+            position: relative;
+            text-decoration: none;
+        }
+        .hover-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--text-main);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .hover-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+    </style>
 </head>
-<body>
+<body class="selection:bg-slate-50 selection:text-slate-900">
 
-    <header>
-        <div class="logo"><a href="#">Artist Name</a></div>
-        <div class="menu-btn" id="menu-btn">
-            <span></span>
-            <span></span>
-            <span></span>
+    <!-- Header / Nav -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-6 md:px-8 py-6 md:py-8 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
+            <div class="text-sm tracking-[0.3em] serif font-bold cursor-pointer uppercase" onclick="navigateTo('home')">
+                Ruca
+            </div>
+            <div class="flex flex-wrap justify-center gap-6 md:gap-10 text-[9px] tracking-[0.3em] uppercase">
+                <a href="javascript:void(0)" onclick="scrollToTopic('section-lab')" class="hover-link">Lab</a>
+                <a href="javascript:void(0)" onclick="scrollToTopic('section-articles')" class="hover-link">Articles</a>
+                <a href="javascript:void(0)" onclick="scrollToTopic('section-diary')" class="hover-link">Diary</a>
+                <a href="javascript:void(0)" onclick="scrollToTopic('section-music')" class="hover-link">Music</a>
+                <a href="javascript:void(0)" onclick="navigateTo('biography')" class="hover-link">Biography</a>
+            </div>
         </div>
-    </header>
-
-    <nav class="nav-menu" id="nav-menu">
-        <ul>
-            <li><a href="#news" class="nav-link">NEWS</a></li>
-            <li><a href="#release" class="nav-link">RELEASE</a></li>
-            <li><a href="#live" class="nav-link">LIVE</a></li>
-            <li><a href="#video" class="nav-link">VIDEO</a></li>
-        </ul>
     </nav>
 
-    <div class="hero">
-        <video id="bg-video" class="hero-video" autoplay loop muted playsinline>
-            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-        </video>
-        <div class="hero-content">
-            <h1>Artist Name</h1>
-            <button id="unmute-btn" class="unmute-btn">Tap to unmute</button>
+    <div id="page-content" class="fade-in-content">
+        <!-- HOME PAGE -->
+        <div id="home-view">
+            <main class="pt-24 md:pt-32">
+            
+
+                <!-- Seamless Grid Section -->
+                <section class="max-w-5xl mx-auto px-6 md:px-12 pb-24">
+                    <div class="grid grid-cols-1 md:grid-cols-2 border border-zinc-50 shadow-sm">
+                        
+                        <!-- Topic: Lab -->
+                        <div id="section-lab" class="topic-card scroll-mt-32 cursor-pointer group border-b md:border-r border-zinc-50" onclick="viewTopic('lab-project')">
+                            <div class="topic-visual">
+                                <span class="text-[10px] tracking-[0.4em] text-zinc-300 uppercase italic-serif"></span>
+                            </div>
+                            <div class="topic-overlay">
+                                <div class="mb-2 text-[9px] tracking-widest text-zinc-400 uppercase italic-serif">Lab / Research</div>
+                                <h2 class="text-xl serif mb-4">Mathematical Logic</h2>
+                                <p class="text-[10px] leading-loose text-zinc-400 serif mb-6 max-w-xs">
+                                    数理論理学
+                                </p>
+                                <span class="text-[9px] tracking-widest border-b border-zinc-200 pb-1 uppercase">Enter Lab</span>
+                            </div>
+                        </div>
+
+                        <!-- Topic: Articles -->
+                        <div id="section-articles" class="topic-card scroll-mt-32 cursor-pointer group border-b border-zinc-50" onclick="viewTopic('articles-latex')">
+                            <div class="topic-visual">
+                                <span class="text-2xl serif text-zinc-200"></span>
+                            </div>
+                            <div class="topic-overlay">
+                                <div class="mb-2 text-[9px] tracking-widest text-zinc-400 uppercase italic-serif">Articles </div>
+                                <h2 class="text-xl serif mb-4">Articles</h2>
+                                <p class="text-[10px] leading-loose text-zinc-400 serif mb-6 max-w-xs">
+                                    資料や数学の記事
+                                </p>
+                                <span class="text-[9px] tracking-widest border-b border-zinc-200 pb-1 uppercase">Read Document</span>
+                            </div>
+                        </div>
+
+                        <!-- Topic: Diary -->
+                        <div id="section-diary" class="topic-card scroll-mt-32 cursor-pointer group border-b md:border-b-0 md:border-r border-zinc-50" onclick="viewTopic('diary-log')">
+                            <div class="topic-visual">
+                                <span class="text-[10px] tracking-[0.4em] text-zinc-300 uppercase italic-serif"></span>
+                            </div>
+                            <div class="topic-overlay">
+                                <div class="mb-2 text-[9px] tracking-widest text-zinc-400 uppercase italic-serif">Diary / Thinking</div>
+                                <h2 class="text-xl serif mb-4">あるいは読書録</h2>
+                                <p class="text-[10px] leading-loose text-zinc-400 serif mb-6 max-w-xs">
+                                    日々の雑感と、最近読み終えた書籍の個人的なメモ。
+                                </p>
+                                <span class="text-[9px] tracking-widest border-b border-zinc-200 pb-1 uppercase">Open Diary</span>
+                            </div>
+                        </div>
+
+                        <!-- Topic: Music -->
+                        <div id="section-music" class="topic-card scroll-mt-32 cursor-pointer group" onclick="viewTopic('music-archive')">
+                            <div class="topic-visual">
+                                <div class="w-16 h-[1px] bg-zinc-100"></div>
+                            </div>
+                            <div class="topic-overlay">
+                                <div class="mb-2 text-[9px] tracking-widest text-zinc-400 uppercase italic-serif"></div>
+                                <h2 class="text-xl serif mb-4">Music</h2>
+                                <p class="text-[10px] leading-loose text-zinc-400 serif mb-6 max-w-xs">
+                                        日常を彩る音楽
+                                </p>
+                                <span class="text-[9px] tracking-widest border-b border-zinc-200 pb-1 uppercase">Listen</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- TOPIC DETAIL PAGE -->
+        <div id="topic-view" class="hidden">
+            <main class="pt-24 md:pt-32 pb-24">
+                <article class="max-w-2xl mx-auto px-8">
+                    <button onclick="navigateTo('home')" class="text-[9px] tracking-[0.3em] uppercase text-zinc-400 hover:text-zinc-800 transition-colors mb-24 flex items-center gap-6">
+                        <span class="w-12 h-[1px] bg-zinc-200 group-hover:bg-zinc-800 transition-colors"></span>
+                        Index
+                    </button>
+                    
+                    <header class="mb-20">
+                        <div id="topic-meta" class="mb-4 text-[9px] tracking-[0.2em] text-zinc-400 uppercase italic-serif"></div>
+                        <h1 id="topic-title" class="text-2xl md:text-3xl serif mb-10 leading-relaxed"></h1>
+                    </header>
+
+                    <div id="topic-content" class="text-xs leading-[2.5] text-zinc-500 serif space-y-10">
+                        <!-- Content will be injected here -->
+                    </div>
+
+                    <footer class="mt-48 pt-20 border-t border-zinc-50">
+                        <div class="text-[9px] tracking-[0.4em] text-zinc-300 uppercase italic-serif text-center">Archive Fragment</div>
+                    </footer>
+                </article>
+            </main>
+        </div>
+
+        <!-- BIOGRAPHY PAGE -->
+        <div id="biography-view" class="hidden">
+            <main class="pt-24 md:pt-32 pb-24">
+                <article class="max-w-2xl mx-auto px-8">
+                    <button onclick="navigateTo('home')" class="text-[9px] tracking-[0.3em] uppercase text-zinc-400 hover:text-zinc-800 transition-colors mb-24 flex items-center gap-6">
+                        <span class="w-12 h-[1px] bg-zinc-200 group-hover:bg-zinc-800 transition-colors"></span>
+                        Back
+                    </button>
+                    
+                    <header class="mb-20 text-center">
+                        <h1 class="text-2xl md:text-3xl serif mb-8 leading-relaxed italic-serif">Biography</h1>
+                        <div class="w-[1px] h-12 bg-zinc-100 mx-auto"></div>
+                    </header>
+
+                    <div class="text-xs leading-[2.5] text-zinc-500 serif space-y-16">
+                        <section>
+                            <h2 class="text-sm text-zinc-800 mb-6">Ruca</h2>
+                            <p>
+                                数学の基礎を司る、数理論理学に興味を持っています。<br>
+                                特に集合論における巨大基数や、地質学に関心があります。
+                            </p>
+                        </section>
+
+                        <section>
+                            <h2 class="text-sm text-zinc-800 mb-6">Interests</h2>
+                            <ul class="space-y-4 tracking-wider">
+                                <li>— Mathematical Logic (数理論理学)</li>
+                                <li>— Axiomatic Set Theory (公理的集合論)</li>
+                                <li>— Philosophy of Mathematics (数学の哲学)</li>
+                                <li>— Shogi (将棋)</li>
+                                <li>— Japanese Indie Music</li>
+                                <li>— ハク。</li>
+                            </ul>
+                        </section>
+
+                        <section>
+                            <h2 class="text-sm text-zinc-800 mb-6">Background</h2>
+                            <div class="space-y-4">
+                                <div class="flex gap-8">
+                                    <div class="w-24 text-zinc-400 font-mono text-[10px] pt-1">2022 - 2026</div>
+                                    <div>University of X / 数学専攻</div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <footer class="mt-48 pt-20 border-t border-zinc-50">
+                        <div class="text-[9px] tracking-[0.4em] text-zinc-300 uppercase italic-serif text-center">Profile</div>
+                    </footer>
+                </article>
+            </main>
         </div>
     </div>
 
-    <section id="news">
-        <h2 class="section-title">News</h2>
-        <ul class="news-list">
-            <li>
-                <span class="news-date">2026.03.01</span>
-                <span class="news-title"><a href="#">新しいミュージックビデオを公開しました。</a></span>
-            </li>
-            <li>
-                <span class="news-date">2026.02.15</span>
-                <span class="news-title"><a href="#">春の全国ツアー開催決定！チケット先行予約開始。</a></span>
-            </li>
-            <li>
-                <span class="news-date">2026.01.20</span>
-                <span class="news-title"><a href="#">公式オンラインストアがオープンしました。</a></span>
-            </li>
-        </ul>
-    </section>
-
-    <section id="release">
-        <h2 class="section-title">Release</h2>
-        <div class="release-grid">
-            <div class="release-item">
-                <div class="jacket-placeholder">Jacket Image (600x600)</div>
-                <div class="release-title">New Single "Hello"</div>
-                <div class="release-date">2026.04.15 Release</div>
+    <!-- Footer -->
+    <footer class="bg-white py-32">
+        <div class="max-w-4xl mx-auto px-8 text-center">
+            <div class="serif text-[11px] italic-serif mb-16 text-zinc-400 leading-loose">
+                "Mathematics is not a careful march down a well-cleared highway,<br>
+                but a journey into a strange wilderness, where the explorers often get lost."
             </div>
-            <div class="release-item">
-                <div class="jacket-placeholder">Jacket Image (600x600)</div>
-                <div class="release-title">1st Album "World"</div>
-                <div class="release-date">2025.11.03 Release</div>
+            <div class="flex justify-center gap-12 text-[8px] tracking-[0.3em] text-zinc-300 uppercase">
+                <a href="#" class="hover:text-zinc-900 transition-colors">Instagram</a>
+                <a href="#" class="hover:text-zinc-900 transition-colors">GitHub</a>
+                <a href="#" class="hover:text-zinc-900 transition-colors">Email</a>
+            </div>
+            <div class="mt-20 text-[8px] text-zinc-200 tracking-[0.5em] uppercase">
+                &copy; Mathematics Archive.
             </div>
         </div>
-    </section>
-
-    <section id="live">
-        <h2 class="section-title">Live</h2>
-        <ul class="live-list">
-            <li>
-                <div class="live-info">
-                    <h3>Spring Tour 2026 - Tokyo</h3>
-                    <p>2026.05.10 (Sun) @ Zepp Tokyo</p>
-                </div>
-                <a href="#" class="live-btn">Details</a>
-            </li>
-            <li>
-                <div class="live-info">
-                    <h3>Spring Tour 2026 - Osaka</h3>
-                    <p>2026.05.17 (Sun) @ Namba Hatch</p>
-                </div>
-                <a href="#" class="live-btn">Details</a>
-            </li>
-        </ul>
-    </section>
-
-    <footer>
-        <p>&copy; 2026 Artist Name Official Website. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // ハンバーガーメニューの開閉処理
-        const menuBtn = document.getElementById('menu-btn');
-        const navMenu = document.getElementById('nav-menu');
-        const navLinks = document.querySelectorAll('.nav-link');
+        const topics = {
+            'lab-project': {
+                title: '高次元多様体におけるホモロジー的変容',
+                meta: 'Lab / Research / Updated 2024.01.12',
+                content: `
+                    <p>このプロジェクトでは、特定の高次元多様体におけるホモロジー群の計算とその視覚化を試みています。数学的な厳密さと、直感的な幾何学像が剥離していく境界線に興味があります。</p>
+                    <p>計算機を用いたアプローチにより、手計算では不可能な複雑な構造の断片が見えてきました。それは、霧の中から少しずつ島の形が浮かび上がってくるような感覚に近いものです。</p>
+                `
+            },
+            'articles-latex': {
+                title: 'ストークスの定理とその現代的解釈',
+                meta: 'Articles / LaTeX / 2023.12.05',
+                content: `
+                    <p>微積分学の基本定理から、多様体上のストークスの定理への一般化は、数学教育における一つの到達点です。</p>
+                    <div class="my-16 py-12 text-center text-zinc-800 bg-zinc-50/50 rounded-sm">
+                        $$ \int_{\partial \Omega} \omega = \int_{\Omega} d\omega $$
+                    </div>
+                    <p>この簡潔な式に込められた情報は、物理学から代数幾何学まで広範な影響を及ぼしています。本資料では、特にコホモロジー的な観点から、この定理が持つ「境界の境界は存在しない」という本質の意味を紐解きます。</p>
+                `
+            },
+            'diary-log': {
+                title: '冬の朝の素数、あるいは読書録',
+                meta: 'Diary / Thinking / 2024.01.20',
+                content: `
+                    <p>冷え込んだ朝は、数字がより鋭く感じられる気がします。最近は、不完全性定理の周辺をもう一度散歩しています。ゲーデルが見た景色は、当時の数学界にとってどれほど眩しく、また恐ろしいものだったのでしょうか。</p>
+                    <p>夜は、数論に関する古書をめくりながら、まだ解決されていない予想のいくつかに思いを馳せます。解けないからこそ美しい、という表現はあまりに文学的すぎますが、事実はそれに近いと感じるのです。</p>
+                `
+            },
+            'music-archive': {
+                title: 'Music Archive',
+                meta: 'Music / Index',
+                content: `
+                    <p class="mb-16">日常を彩り、風景を変える音楽たち。アーティストやジャンルごとに個人的な記録を残している。</p>
 
-        menuBtn.addEventListener('click', () => {
-            menuBtn.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-24">
+                        <!-- Subtopic 1: ハク。 -->
+                        <div class="group cursor-pointer border border-zinc-100 p-10 hover:border-zinc-300 transition-colors" onclick="viewTopic('music-haku')">
+                            <div class="text-[9px] tracking-widest text-zinc-400 uppercase italic-serif mb-4">Japanese Indie</div>
+                            <h3 class="text-xl serif text-zinc-800 mb-4 group-hover:text-zinc-500 transition-colors">ハク。</h3>
+                            <p class="text-xs leading-loose text-zinc-500">
+                                日常に寄り添い、思考のピントを合わせてくれるロックバンド。
+                            </p>
+                            <div class="mt-8 text-[9px] tracking-widest border-b border-zinc-200 pb-1 uppercase inline-block group-hover:border-zinc-400 transition-colors">View Records</div>
+                        </div>
 
-        // メニューのリンクをクリックしたらメニューを閉じる
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menuBtn.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
+                        <!-- Subtopic 2: Ambient -->
+                        <div class="group cursor-pointer border border-zinc-100 p-10 hover:border-zinc-300 transition-colors" onclick="viewTopic('music-ambient')">
+                            <div class="text-[9px] tracking-widest text-zinc-400 uppercase italic-serif mb-4">Ambient / Drone</div>
+                            <h3 class="text-xl serif text-zinc-800 mb-4 group-hover:text-zinc-500 transition-colors">poor man's rose</h3>
+                            <p class="text-xs leading-loose text-zinc-500">
+                                透き通る歌声の背景に鳴り響く暗澹たる旋律。
+                            </p>
+                            <div class="mt-8 text-[9px] tracking-widest border-b border-zinc-200 pb-1 uppercase inline-block group-hover:border-zinc-400 transition-colors">View Records</div>
+                        </div>
+                    </div>
+                `
+            },
+            'music-haku': {
+                title: 'ハク。',
+                meta: 'Music',
+                content: `
+                    <button onclick="viewTopic('music-archive')" class="text-[9px] tracking-[0.3em] uppercase text-zinc-400 hover:text-zinc-800 transition-colors mb-16 flex items-center gap-4">
+                        <span class="w-8 h-[1px] bg-zinc-200 transition-colors"></span>
+                        Back to Music Index
+                    </button>
 
-        // 動画のミュート解除・再生切り替え処理
-        const video = document.getElementById('bg-video');
-        const unmuteBtn = document.getElementById('unmute-btn');
+                    <p class="mb-16">日常に寄り添い、思考のピントを合わせてくれるロックバンド「ハク。」の楽曲と映像についての個人的な記録を残す。</p>
 
-        unmuteBtn.addEventListener('click', () => {
-            if (video.muted) {
-                video.muted = false;
-                unmuteBtn.textContent = 'Mute';
-            } else {
-                video.muted = true;
-                unmuteBtn.textContent = 'Tap to unmute';
+                    <div class="mb-24">
+                        <!-- YouTubeの埋め込み領域 -->
+                        <div class="aspect-video w-full mb-8 bg-zinc-50 rounded-sm overflow-hidden border border-zinc-100 shadow-sm">
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/EBmKjAYMelw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        
+                        <!-- コメント領域 -->
+                        <h3 class="text-lg serif text-zinc-800 mb-6">回転してから考える</h3>
+                        <div class="text-xs leading-[2.5] text-zinc-500 space-y-6">
+                            <p>ここには動画に対するコメントや、聴きながら考えたことの考察を記載します。静かな立ち上がりから、徐々に展開していく構造が美しい。</p>
+                            <p>音の重なりの中に、ある種の規則性を見出すことができる。それは計算論における複雑さのクラスを思わせるような、予測可能でありながら予期せぬ和音の広がりを持っている。</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-24">
+                        <div class="aspect-video w-full mb-8 bg-zinc-50 rounded-sm overflow-hidden border border-zinc-100 shadow-sm">
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/K0fmCUxsQR8?si=ajSxuGGkaOpzvMX2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                        
+                        <h3 class="text-lg serif text-zinc-800 mb-6">奥二重で見る</h3>
+                        <div class="text-xs leading-[2.5] text-zinc-500 space-y-6">
+                            <p>映像と音楽がシンクロする心地よさ。日々の研究や思索の合間にこの動画を流すことで、思考のピントが再び合っていく感覚がある。</p>
+                        </div>
+                    </div>
+                `
+            },
+            'music-ambient': {
+                title: "poor man's rose",
+                meta: 'Music',
+                content: `
+                    <button onclick="viewTopic('music-archive')" class="text-[9px] tracking-[0.3em] uppercase text-zinc-400 hover:text-zinc-800 transition-colors mb-16 flex items-center gap-4">
+                        <span class="w-8 h-[1px] bg-zinc-200 transition-colors"></span>
+                        Back to Music Index
+                    </button>
+
+                    <p class="mb-16">数学を考えるとき、私はしばしば音楽を必要とします。それは感情を揺さぶるためではなく、思考の構造を支える「足場」のようなものです。</p>
+                    
+                    <div class="mb-24">
+                        <div class="aspect-video w-full mb-8 bg-zinc-50 rounded-sm overflow-hidden border border-zinc-100 shadow-sm flex items-center justify-center">
+                            <span class="text-zinc-300 text-xs tracking-widest uppercase">YouTube Video Placeholder</span>
+                        </div>
+                        <h3 class="text-lg serif text-zinc-800 mb-6">アンビエントの記録</h3>
+                        <div class="text-xs leading-[2.5] text-zinc-500 space-y-6">
+                            <p>環境音に近いこの音楽は、邪魔をせず、空間の密度を変えるだけだ。新しい定理の証明を追うとき、この微かなノイズが集中力を高めてくれる。</p>
+                        </div>
+                    </div>
+                `
             }
+        };
+
+        function navigateTo(viewId) {
+            const container = document.getElementById('page-content');
+            container.classList.add('fade-out');
+
+            setTimeout(() => {
+                document.getElementById('home-view').classList.add('hidden');
+                document.getElementById('topic-view').classList.add('hidden');
+                document.getElementById('biography-view').classList.add('hidden');
+
+                if (viewId === 'home') {
+                    document.getElementById('home-view').classList.remove('hidden');
+                } else if (viewId === 'biography') {
+                    document.getElementById('biography-view').classList.remove('hidden');
+                }
+                
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                container.classList.remove('fade-out');
+            }, 600);
+        }
+
+        function viewTopic(topicId) {
+            const topic = topics[topicId];
+            if (!topic) return;
+
+            const container = document.getElementById('page-content');
+            container.classList.add('fade-out');
+
+            setTimeout(() => {
+                document.getElementById('topic-title').innerText = topic.title;
+                document.getElementById('topic-meta').innerText = topic.meta;
+                document.getElementById('topic-content').innerHTML = topic.content;
+
+                document.getElementById('home-view').classList.add('hidden');
+                document.getElementById('topic-view').classList.remove('hidden');
+                document.getElementById('biography-view').classList.add('hidden');
+                
+                MathJax.typesetPromise();
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                container.classList.remove('fade-out');
+            }, 600);
+        }
+
+        function scrollToTopic(targetId) {
+            const homeView = document.getElementById('home-view');
+            const targetElement = document.getElementById(targetId);
+
+            if (!targetElement) return;
+
+            if (homeView.classList.contains('hidden')) {
+                // ホーム画面以外にいる場合は、まずホームに遷移する
+                const container = document.getElementById('page-content');
+                container.classList.add('fade-out');
+
+                setTimeout(() => {
+                    document.getElementById('home-view').classList.remove('hidden');
+                    document.getElementById('topic-view').classList.add('hidden');
+                    document.getElementById('biography-view').classList.add('hidden');
+
+                    container.classList.remove('fade-out');
+                    
+                    // 遷移直後にスクロール位置を調整
+                    setTimeout(() => {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }, 50);
+                }, 600);
+            } else {
+                // すでにホーム画面にいる場合はそのままスクロール
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Reveal animations
+        ScrollReveal().reveal('.topic-card', {
+            delay: 100,
+            duration: 1500,
+            opacity: 0,
+            easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+            interval: 100
         });
     </script>
 
