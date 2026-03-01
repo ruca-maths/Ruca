@@ -314,22 +314,21 @@
     <script>
         const topics = {
             'lab-project': {
-                title: '高次元多様体におけるホモロジー的変容',
-                meta: 'Lab / Research / Updated 2024.01.12',
+                title: 'Mathematical Logic',
+                meta: 'Lab / Research',
                 content: `
-                    <p>このプロジェクトでは、特定の高次元多様体におけるホモロジー群の計算とその視覚化を試みています。数学的な厳密さと、直感的な幾何学像が剥離していく境界線に興味があります。</p>
-                    <p>計算機を用いたアプローチにより、手計算では不可能な複雑な構造の断片が見えてきました。それは、霧の中から少しずつ島の形が浮かび上がってくるような感覚に近いものです。</p>
+                    <div class="py-40 flex items-center justify-center border-y border-zinc-50 my-12">
+                        <span class="text-[11px] tracking-[0.5em] text-zinc-400 uppercase italic-serif">Coming Soon</span>
+                    </div>
                 `
             },
             'articles-latex': {
-                title: 'ストークスの定理とその現代的解釈',
-                meta: 'Articles / LaTeX / 2023.12.05',
+                title: 'Articles',
+                meta: 'Articles / Documents',
                 content: `
-                    <p>微積分学の基本定理から、多様体上のストークスの定理への一般化は、数学教育における一つの到達点です。</p>
-                    <div class="my-16 py-12 text-center text-zinc-900 bg-zinc-50/50 rounded-sm">
-                        $$ \int_{\partial \Omega} \omega = \int_{\Omega} d\omega $$
+                    <div class="py-40 flex items-center justify-center border-y border-zinc-50 my-12">
+                        <span class="text-[11px] tracking-[0.5em] text-zinc-400 uppercase italic-serif">Coming Soon</span>
                     </div>
-                    <p>この簡潔な式に込められた情報は、物理学から代数幾何学まで広範な影響を及ぼしています。本資料では、特にコホモロジー的な観点から、この定理が持つ「境界の境界は存在しない」という本質の意味を紐解きます。</p>
                 `
             },
             'diary-archive': {
@@ -659,6 +658,9 @@
             if (!targetElement) return;
             if (!homeView) return;
 
+            // デスクトップ幅（768px以上）かどうかを判定
+            const isDesktop = window.innerWidth >= 768;
+
             if (homeView.classList.contains('hidden')) {
                 // ホーム画面以外にいる場合は、まずホームに遷移する
                 const container = document.getElementById('page-content');
@@ -669,16 +671,24 @@
                     document.getElementById('topic-view').classList.add('hidden');
                     document.getElementById('biography-view').classList.add('hidden');
 
+                    // デスクトップの場合は、フェードインする「前」に一瞬で移動させておく
+                    if (isDesktop) {
+                        targetElement.scrollIntoView({ behavior: 'auto' });
+                    }
+
                     container.classList.remove('fade-out');
                     
-                    // 遷移直後にスクロール位置を調整
-                    setTimeout(() => {
-                        targetElement.scrollIntoView({ behavior: 'smooth' });
-                    }, 50);
+                    // スマホの場合は、フェードイン直後にスムーススクロールで移動
+                    if (!isDesktop) {
+                        setTimeout(() => {
+                            targetElement.scrollIntoView({ behavior: 'smooth' });
+                        }, 50);
+                    }
                 }, 600);
             } else {
-                // すでにホーム画面にいる場合はそのままスクロール
-                targetElement.scrollIntoView({ behavior: 'smooth' });
+                // すでにホーム画面にいる場合
+                const scrollBehavior = isDesktop ? 'auto' : 'smooth';
+                targetElement.scrollIntoView({ behavior: scrollBehavior });
             }
         }
 
