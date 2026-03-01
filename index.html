@@ -136,10 +136,10 @@
                 Ruca
             </div>
             <div class="flex flex-wrap justify-center gap-6 md:gap-10 text-[9px] tracking-[0.3em] uppercase">
-                <a href="javascript:void(0)" onclick="scrollToTopic('section-lab')" class="hover-link">Lab</a>
-                <a href="javascript:void(0)" onclick="scrollToTopic('section-articles')" class="hover-link">Articles</a>
-                <a href="javascript:void(0)" onclick="scrollToTopic('section-diary')" class="hover-link">Diary</a>
-                <a href="javascript:void(0)" onclick="scrollToTopic('section-music')" class="hover-link">Music</a>
+                <a href="javascript:void(0)" onclick="navigateToCategory('section-lab', 'lab-project')" class="hover-link">Lab</a>
+                <a href="javascript:void(0)" onclick="navigateToCategory('section-articles', 'articles-latex')" class="hover-link">Articles</a>
+                <a href="javascript:void(0)" onclick="navigateToCategory('section-diary', 'diary-archive')" class="hover-link">Diary</a>
+                <a href="javascript:void(0)" onclick="navigateToCategory('section-music', 'music-archive')" class="hover-link">Music</a>
                 <a href="javascript:void(0)" onclick="navigateTo('biography')" class="hover-link">Biography</a>
             </div>
         </div>
@@ -575,7 +575,7 @@
                     
                     <div class="mb-24">
                         <div class="aspect-video w-full mb-8 bg-zinc-50 rounded-sm overflow-hidden border border-zinc-100 shadow-sm">
-                            <iframe width="560" height="315" src="https://www.youtube.com/embed/VXznHhTClPM?si=Xw3GNZ-e7isfpVqq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/VXznHhTClPM?si=Xw3GNZ-e7isfpVqq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
                         
                         <h3 class="text-lg serif text-zinc-900 mb-6">TOMOO / コントラスト</h3>
@@ -586,7 +586,7 @@
 
                      <div class="mb-24">
                         <div class="aspect-video w-full mb-8 bg-zinc-50 rounded-sm overflow-hidden border border-zinc-100 shadow-sm">
-                            <iframe width="560" height="315" src="https://www.youtube.com/embed/hmQ7yxKfixI?si=KKL1dabArA793Gl3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/hmQ7yxKfixI?si=KKL1dabArA793Gl3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
                         
                         <h3 class="text-lg serif text-zinc-900 mb-6">片平里菜 / 始まりに</h3>
@@ -597,7 +597,7 @@
 
                     <div class="mb-24">
                         <div class="aspect-video w-full mb-8 bg-zinc-50 rounded-sm overflow-hidden border border-zinc-100 shadow-sm">
-                            <iframe width="560" height="315" src="https://www.youtube.com/embed/n7eHgdoINcM?si=PLC7ELGPzFBBX8mu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/n7eHgdoINcM?si=PLC7ELGPzFBBX8mu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
                         
                         <h3 class="text-lg serif text-zinc-900 mb-6">イアイリ / カランコエ</h3>
@@ -649,6 +649,17 @@
                 window.scrollTo({ top: 0, behavior: 'instant' });
                 container.classList.remove('fade-out');
             }, 600);
+        }
+
+        function navigateToCategory(sectionId, topicId) {
+            const homeView = document.getElementById('home-view');
+            if (!homeView.classList.contains('hidden')) {
+                // ホーム画面にいる時は該当セクションへスクロール
+                scrollToTopic(sectionId);
+            } else {
+                // ホーム画面以外（トピック画面など）にいる時は、直接該当トピックのページを開く
+                viewTopic(topicId);
+            }
         }
 
         function scrollToTopic(targetId) {
