@@ -383,9 +383,18 @@
                         Back to Diary Index
                     </button>
 
+                    <!-- Filter Menu -->
+                    <div class="flex flex-wrap gap-8 mb-16">
+                        <button onclick="filterBooks('all')" class="filter-btn text-[10px] tracking-widest transition-colors text-zinc-900 border-b border-zinc-900 pb-1" data-target="all">All</button>
+                        <button onclick="filterBooks('set')" class="filter-btn text-[10px] tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors pb-1" data-target="set">Set Theory</button>
+                        <button onclick="filterBooks('logic')" class="filter-btn text-[10px] tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors pb-1" data-target="logic">Logic & Philosophy</button>
+                        <button onclick="filterBooks('topology')" class="filter-btn text-[10px] tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors pb-1" data-target="topology">Topology</button>
+                        <button onclick="filterBooks('group')" class="filter-btn text-[10px] tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors pb-1" data-target="group">Group Theory</button>
+                    </div>
+
                     <div class="space-y-24">
                         <!-- Book 1 -->
-                        <div class="flex flex-col sm:flex-row gap-8 md:gap-12">
+                        <div class="book-item flex flex-col sm:flex-row gap-8 md:gap-12" data-genre="set topology">
                             <!-- 本の画像とAmazonリンク -->
                             <!-- href="..." の部分をAmazonの書籍ページURLに変更してください -->
                             <a href="https://amzn.asia/d/0iyIRIpK" target="_blank" rel="noopener noreferrer" class="w-32 md:w-40 flex-shrink-0 group">
@@ -408,7 +417,7 @@
                         </div>
                         
                         <!-- Book 2 -->
-                        <div class="flex flex-col sm:flex-row gap-8 md:gap-12 pt-16 border-t border-zinc-50">
+                        <div class="book-item flex flex-col sm:flex-row gap-8 md:gap-12 pt-16 border-t border-zinc-50" data-genre="set logic">
                             <!-- 本の画像とAmazonリンク -->
                             <a href="https://amzn.asia/d/08vW4V2C" target="_blank" rel="noopener noreferrer" class="w-32 md:w-40 flex-shrink-0 group">
                                 <div class="aspect-[2/3] bg-zinc-50 border border-zinc-100 overflow-hidden relative shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
@@ -429,7 +438,7 @@
                         </div>
 
                         <!-- Book 3 -->
-                        <div class="flex flex-col sm:flex-row gap-8 md:gap-12 pt-16 border-t border-zinc-50">
+                        <div class="book-item flex flex-col sm:flex-row gap-8 md:gap-12 pt-16 border-t border-zinc-50" data-genre="group topology">
                             <!-- 本の画像とAmazonリンク -->
                             <a href="https://amzn.asia/d/01ecEF8O" target="_blank" rel="noopener noreferrer" class="w-32 md:w-40 flex-shrink-0 group">
                                 <div class="aspect-[2/3] bg-zinc-50 border border-zinc-100 overflow-hidden relative shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
@@ -443,6 +452,29 @@
                             <!-- 本のタイトルと感想 -->
                             <div class="flex-1">
                                 <h3 class="text-lg serif text-zinc-900 mb-6">群と位相 (基礎数学選書 (5))</h3>
+                                <div class="text-xs leading-[2.5] text-zinc-700 space-y-6">
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Book 4 -->
+                        <div class="book-item flex flex-col sm:flex-row gap-8 md:gap-12" data-genre="group">
+                            <!-- 本の画像とAmazonリンク -->
+                            <!-- href="..." の部分をAmazonの書籍ページURLに変更してください -->
+                            <a href="https://amzn.asia/d/09tAfsUq" target="_blank" rel="noopener noreferrer" class="w-32 md:w-40 flex-shrink-0 group">
+                                <div class="aspect-[2/3] bg-zinc-50 border border-zinc-100 overflow-hidden relative shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
+                                    <!-- src="..." の部分をAmazonの画像URLに変更してください -->
+                                    <img src="https://m.media-amazon.com/images/I/51VLJdvVzxL._SL1000_.jpg" alt="集合・位相入門 (松坂和夫 数学入門シリーズ 1)" class="w-full h-full object-cover mix-blend-multiply" />
+                                </div>
+                                <div class="mt-4 text-[9px] tracking-widest text-zinc-500 uppercase border-b border-zinc-200 pb-1 inline-block group-hover:border-zinc-500 transition-colors">
+                                    View on Amazon ↗
+                                </div>
+                            </a>
+                            
+                            <!-- 本のタイトルと感想 -->
+                            <div class="flex-1">
+                                <h3 class="text-lg serif text-zinc-900 mb-6">代数学入門: 群・環・体の基礎とガロワ理論</h3>
                                 <div class="text-xs leading-[2.5] text-zinc-700 space-y-6">
                                     <p></p>
                                 </div>
@@ -470,7 +502,7 @@
 
                         <!-- Subtopic 2:  -->
                         <div class="group cursor-pointer border border-zinc-100 p-10 hover:border-zinc-300 transition-colors" onclick="viewTopic('music-ambient')">
-                            <div class="text-[9px] tracking-widest text-zinc-500 uppercase italic-serif mb-4">Ambient / Drone</div>
+                            <div class="text-[9px] tracking-widest text-zinc-500 uppercase italic-serif mb-4"></div>
                             <h3 class="text-xl serif text-zinc-900 mb-4 group-hover:text-zinc-600 transition-colors">poor man's rose</h3>
                             <p class="text-xs leading-loose text-zinc-700">
                                 透き通る歌声の背景に鳴り響く暗澹たる旋律。
@@ -499,7 +531,7 @@
                         Back to Music Index
                     </button>
 
-                    <p class="mb-16 text-zinc-700">日常に寄り添い、思考のピントを合わせてくれるロックバンド「ハク。」の楽曲と映像についての個人的な記録を残す。</p>
+                    <p class="mb-16 text-zinc-700">素朴さやなつかしさの中に力強さを感じる 4 piece バンド「ハク。」の楽曲など。</p>
 
                     <div class="mb-24">
                         <!-- YouTubeの埋め込み領域 -->
@@ -510,8 +542,8 @@
                         <!-- コメント領域 -->
                         <h3 class="text-lg serif text-zinc-900 mb-6">回転してから考える</h3>
                         <div class="text-xs leading-[2.5] text-zinc-700 space-y-6">
-                            <p>ここには動画に対するコメントや、聴きながら考えたことの考察を記載します。静かな立ち上がりから、徐々に展開していく構造が美しい。</p>
-                            <p>音の重なりの中に、ある種の規則性を見出すことができる。それは計算論における複雑さのクラスを思わせるような、予測可能でありながら予期せぬ和音の広がりを持っている。</p>
+                            <p></p>
+                            <p></p>
                         </div>
                     </div>
 
@@ -703,6 +735,44 @@
                 const scrollBehavior = isDesktop ? 'auto' : 'smooth';
                 targetElement.scrollIntoView({ behavior: scrollBehavior });
             }
+        }
+
+        function filterBooks(genre) {
+            const books = document.querySelectorAll('.book-item');
+            const btns = document.querySelectorAll('.filter-btn');
+
+            // ボタンのアクティブ状態を切り替え
+            btns.forEach(btn => {
+                if (btn.dataset.target === genre) {
+                    btn.classList.add('text-zinc-900', 'border-b', 'border-zinc-900');
+                    btn.classList.remove('text-zinc-400');
+                } else {
+                    btn.classList.remove('text-zinc-900', 'border-b', 'border-zinc-900');
+                    btn.classList.add('text-zinc-400');
+                }
+            });
+
+            let isFirstVisible = true;
+
+            // 各本を表示・非表示にしつつ、レイアウトの境界線を調整する
+            books.forEach(book => {
+                // 複数のジャンルがスペース区切りで指定されている場合に対応
+                const genres = book.dataset.genre ? book.dataset.genre.split(' ') : [];
+                if (genre === 'all' || genres.includes(genre)) {
+                    book.classList.remove('hidden');
+                    book.classList.add('flex');
+                    
+                    if (isFirstVisible) {
+                        book.classList.remove('pt-16', 'border-t', 'border-zinc-50');
+                        isFirstVisible = false;
+                    } else {
+                        book.classList.add('pt-16', 'border-t', 'border-zinc-50');
+                    }
+                } else {
+                    book.classList.add('hidden');
+                    book.classList.remove('flex', 'pt-16', 'border-t', 'border-zinc-50');
+                }
+            });
         }
 
         // Reveal animations
